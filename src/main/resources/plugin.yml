@@ -1,0 +1,5 @@
+name: AntiClean
+version: 1.0.4
+main: com.anticlean.AntiCleanPlugin
+api-version: '1.21'
+description: Kill loot protection - victim loot is stored in a private chest for the killer.

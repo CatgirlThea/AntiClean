@@ -21,7 +21,6 @@ A Paper **1.21.11** plugin that protects kill loot from being cleaned up or stol
 `plugins/AntiClean/config.yml`:
 
 ```yaml
-# Seconds the killer's chest stays private and the killer is protected from damage.
 protection-duration: 45
 ```
 
