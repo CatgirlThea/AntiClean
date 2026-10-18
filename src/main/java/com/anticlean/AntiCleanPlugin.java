@@ -13,7 +13,6 @@ public final class AntiCleanPlugin extends JavaPlugin {
     public void onEnable() {
         saveDefaultConfig();
         protectionManager = new ProtectionManager(this);
-        ProtectionEntry.init(this);
         getServer().getPluginManager().registerEvents(new KillListener(this), this);
         getServer().getPluginManager().registerEvents(new CombatListener(this), this);
         getServer().getPluginManager().registerEvents(new ChestListener(this), this);
@@ -27,7 +26,6 @@ public final class AntiCleanPlugin extends JavaPlugin {
         if (protectionManager != null) {
             protectionManager.shutdown();
         }
-        ProtectionEntry.shutdown();
     }
 
     public ProtectionManager getProtectionManager() {
